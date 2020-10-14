@@ -20,9 +20,9 @@ public class PosMachine {
     public List<ItemInfo> convertBarcodeToItems (List<String> barcodes) {
         List<ItemInfo> itemsWithDetails = new ArrayList<>();
 
-        for(int i = 0; i < barcodes.size(); i++){
-            for(ItemInfo itemInfo : itemInfoList){
-                if(barcodes.get(i).equals(itemInfo.getBarcode())){
+        for (String barcode : barcodes) {
+            for (ItemInfo itemInfo : itemInfoList) {
+                if (barcode.equals(itemInfo.getBarcode())) {
                     itemsWithDetails.add(itemInfo);
                     break;
                 }
@@ -48,18 +48,19 @@ public class PosMachine {
 
     public String calculateReceipt (Map<String, Integer> itemQuantityMap) {
         int subTotal, total=0;
-        String allItemString = "", receipt = "";
+        StringBuilder allItemString = new StringBuilder();
+        String receipt = "";
 
         for(ItemInfo itemInfo : itemInfoList){
             subTotal = itemInfo.getPrice() * itemQuantityMap.get(itemInfo.getName());
             String itemString = "Name: " + itemInfo.getName() + ", Quantity: " + itemQuantityMap.get(itemInfo.getName()) +
                     ", Unit price: " + itemInfo.getPrice() + " (yuan), Subtotal: " + subTotal + " (yuan)\n";
 
-            allItemString += itemString;
+            allItemString.append(itemString);
             total += subTotal;
         }
 
-        receipt = generateReceipt(total, allItemString);
+        receipt = generateReceipt(total, allItemString.toString());
 
         return receipt;
     }
